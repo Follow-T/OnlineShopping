@@ -1,0 +1,18 @@
+@media only screen and (max-width: 1000px) {
+.headline { width: 100% ;padding-top:10px;}
+.headline ul { height: auto; padding-bottom: 10px; overflow: hidden }
+.headline ul li { width: 49%; float: left; }
+.headline ul li:last-child { float: right }
+.headline ul li span { padding: 0 20px }
+#article {margin-top:410.5px}
+.flow-default li {width: 47%;}
+}
+@media only screen and (min-width: 1000px) {
+.headline { width: 30%; }
+.headline ul { height: 260px; padding-bottom: 10px; overflow: hidden }
+.headline ul li { width: 100%; float: left; }
+.headline ul li:last-child { float: right }
+.headline ul li span { padding: 0 20px }
+#article {margin-top:267.5px}
+.flow-default li {width: 31%;}
+}

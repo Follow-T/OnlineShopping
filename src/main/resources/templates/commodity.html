@@ -1,0 +1,278 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>FollowT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../res/css/global.css">
+  <link rel="stylesheet" href="/res/css/common.css">
+  <link rel="stylesheet" href="/res/css/m.css">
+  <link rel="stylesheet" href="/res/css/kk.css">
+</head>
+<style>
+
+
+</style>
+<body>
+
+<div class="fly-header layui-bg-black" th:replace="~{index::header}">
+
+</div>
+
+
+
+
+<div class="layui-container" style="margin-top:7.5px; display:block" id="content">
+  <div class="container">
+    <form class="parent" th:replace="~{search::search}">   	
+    </form>
+  </div>
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md9 "> 
+    	<div class="fly-panel"  >
+    		<div class="fly-panel-title fly-filter" >
+          		<span class="layui-breadcrumb" lay-separator="|">
+  					<a id="all" href="/index?type=all">全部</a>
+  					<a id="clothes" href="/index?type=clothes">潮衣</a>
+  					<a id="pants" href="/index?type=pants">潮裤</a>
+  					<a id="shoes" href="/index?type=shoes">潮鞋</a>
+  					<a id="cars" href="/index?type=cars">潮车</a>
+  					<a id="computer" href="/index?type=computers">电脑</a>
+  					<a id="watches" href="/index?type=watches">手表</a>
+				</span>
+        	</div>
+    	</div>
+    	<div >
+		  <div class="layui-row layui-col-space15">
+		    <div class="layui-col-md5">
+			    <div class="layui-card" >
+			        <div class="layui-card-header">商品名称: [[${commodity.commodityname}]]</div>
+			        <div class="layui-card-body">
+			          	<img src="/images/commodity.jpg" th:src="${commodity.picture}" style="width:100%;"></img>
+			        </div>
+			    </div>
+			</div>
+			<div class="layui-col-md7">
+			   <div class="layui-card">
+			      <div class="layui-card-header">商品简介: [[${commodity.info}]]</div>
+			       	<div class="layui-card-body">	
+			          <form class="layui-form" action="">
+			          	<div class="layui-form-item">
+						    <label class="layui-form-label">价格</label>
+						    <button type="button" style="border-color:red" class="layui-btn layui-btn-primary layui-btn-sm">[[${commodity.price}]]</button>
+						 </div>	
+					  	<div class="layui-form-item">
+						    <label class="layui-form-label">选择物流</label>
+						    <div class="layui-input-block" >
+						      <select name="interest" lay-filter="aihao">
+						        <option value=""></option>
+						        <option value="0">申通</option>
+						        <option value="1" selected="">中通</option>
+						        <option value="2">圆通</option>
+						        <option value="3"></option>
+						        <option value="4"></option>
+						      </select>
+						    </div>
+						 </div>
+						 <div class="layui-form-item">
+						    <label class="layui-form-label">套餐类型</label>
+						    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="border-color:red">官方标配哦</button>
+						 </div>
+						 <div class="layui-form-item">
+						    <label class="layui-form-label">数量</label>
+						    <div class="layui-input-block">
+						      <input type="number" name="title" id="number"  autocomplete="off" placeholder="请输入数量" class="layui-input" value=1  min="0" onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')">
+						    </div>
+  						</div>
+  						<div class="layui-form-item">
+						    <label class="layui-form-label">配送至</label>
+						    <div class="layui-input-block">
+						      <input type="text" name="title" id="address" autocomplete="off" placeholder="" class="layui-input">
+						    </div>
+  						</div>
+  						
+  						<div class="layui-form-item">
+  						<button type="button" class="layui-btn layui-btn-lg" style="margin-left:8%" id="join">进入该店铺</button>
+  						<button type="button" class="layui-btn layui-btn-lg" style="margin-left:1%" id="purchase">立即购买</button>
+  						<button type="button" class="layui-btn layui-btn-lg" style="margin-left:1%" id="joinShoppingCart">加入购物车</button>
+  						</div>
+  						<div class="layui-form-item">
+						    <label class="layui-form-label">服务承若</label>
+						    <div class="layui-input-block">
+						      <span class="layui-form-label">15天价保</span>
+						      <span class="layui-form-label">正品保证</span>
+						      <span class="layui-form-label">急速退款</span>
+						    </div>
+  						</div>
+  						<div class="layui-form-item">
+						    检测到您当前处于非安全网络环境，部分商品信息可能不准确，请在交易支付页面再次确认商品价格信息。
+					
+  						</div>
+  					 </form>
+			        </div>
+			   </div>
+			</div>
+			<div class="layui-col-md12">
+			   <div class="layui-card">
+			       <div class="layui-card-header">标题</div>
+			       <div class="layui-card-body">
+			         		 内容
+			       </div>
+			    </div>
+			 </div>
+		 </div>
+		</div> 
+    </div>
+    <div class="layui-col-md3" th:replace="~{index::recommend}">
+
+    </div>
+  </div>
+</div>
+<div class="fly-footer">
+  <p><a href="http://followt.xin/" target="_blank">Senlear社区</a> 2019 &copy; <a href="http://followt.xin/" target="_blank">learn more</a></p>
+  <p>
+    <a href="https://get-blog.oss-cn-shanghai.aliyuncs.com/wentaohome/weixin.png" target="_blank">一元也是爱</a>
+    <a href="https://github.com/Follow-T/Senlear-" target="_blank">获取Senlear社区Github地址</a>
+    <a href="https://get-blog.oss-cn-shanghai.aliyuncs.com/wentaohome/mmqrcode1556891308185.png" target="_blank">微信号</a>
+  </p>
+</div>
+ 
+<script src="../res/layui/layui.js"></script>
+<script src="../res/Jquery.js"></script>
+<script src="../res/js/index.js"></script>
+<script>
+layui.cache.page = '';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '../res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '../res/mods/' //这里实际使用时，建议改成绝对路径
+}).extend({
+  fly: 'index'
+}).use('fly');
+</script>
+<script>
+layui.use( ['form','element','layer'], function(){
+  var form = layui.form;
+  var element = layui.element;
+  var layer = layui.layer;
+  var ifUserLogin=[[${ifLoginUser}]];
+  //监听导航点击
+  element.on('nav(demo)', function(elem){
+    //console.log(elem)
+    layer.msg(elem.text());
+  });
+  
+  function beforeSubmit(){
+	  var num=$("#number").val();
+	  var address=$("#address").val();
+	  if(num==""){
+		  layer.msg("数量不能为空！", {icon: 2,time:1000 });
+		  return -1;
+	  }
+	  if(address==""){
+		  layer.msg("地址不能为空！", {icon: 2,time:1000 });
+		  return -1;
+	  }
+	  return 1;
+  }
+  
+  //购买商品
+  $("#purchase").click(function(){
+	if(beforeSubmit()==-1){
+		return;
+	}
+	if(ifUserLogin==false){
+	  layer.msg('请先登录！', {
+	    icon: 2,
+	    time: 1000 //2秒关闭（如果不配置，默认是3秒）
+	  }, function(){	
+		window.location.href="/login";
+		});
+	}else{
+		var html="<div style='display: flex;justify-content: center;align-items: center; '><img src='https://get-blog.oss-cn-shanghai.aliyuncs.com/wentaohome/weixin.png' style='width:500px;height:500px;'></div>";
+		layer.open({
+		  type: 1, 
+		  title:'扫码即可付款',
+		  area: 'auto',
+		  maxWidth:'520',
+		  maxWidth:'auto',
+		  maxmin: true,
+		  content: html
+		  ,btn: ['我已付款','取消付款']
+		  ,yes: function(index, layero){
+			layer.msg("付款成功,宝贝正火速赶来！", {icon: 1,time:1500 });
+			layer.close(index);
+		  },btn2: function(index, layero){
+			layer.msg("取消付款...", {icon: 2,time:1500 });
+			layer.close(index);
+		  }
+	  
+		});  
+	}
+  })
+  
+  //加入购物车
+  $("#joinShoppingCart").click(function(){
+	  var id=[[${commodity.id}]];
+	  if(ifUserLogin==false){
+		  layer.msg('请先登录！', {
+			  icon: 2,
+			  time: 1000 //2秒关闭（如果不配置，默认是3秒）
+			}, function(){
+				window.location.href="/login";
+			});  
+	  }else{
+		  $.ajax({
+	          url: "/joinShoppingTrolley/"+id,
+	          type: 'POST',
+	          data: '',
+	          //这两个设置项必填
+	          contentType: false,
+	          processData: false,
+	          dataType: 'jsonp',
+	          calback: "callback",
+	          cache: false,
+	          success: function (data) {
+	            console.log(data);
+	        　　		if(data['status']=='200'){
+	                  layer.msg("加入购物车成功", {icon: 1,time:1000 });
+	            }else{
+	                  layer.msg(data['data'],{icon:2,time:1000});
+	            }
+	          },
+	          error: function (XMLHttpRequest, textStatus, errorThrown) {
+	          	layer.msg('网络错误!',{icon:2,time:1000});
+	          }
+	    }); 
+	  }  
+  })
+  
+ //进入该店铺
+ $("#join").click(function(){
+	 var storeid=[[${commodity.storeid}]];
+	 window.open("/store/"+storeid);
+ })
+ 
+ //搜索商品
+ $('#search').click(function(){
+	  var searchText=$('#searchText').val();
+	  if(searchText==""){
+		  layer.msg("搜索的商品不能为空！",{icon:2,time:1000});
+		  return;
+	  }
+	  window.location.href="/search?commodityname="+searchText;
+  })
+});
+</script>
+</body>
+</html>

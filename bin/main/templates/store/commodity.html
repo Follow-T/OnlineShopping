@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>我的店铺后台</title>
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo" id="store" th:text="${store.storename}"></div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img th:src="${user.avatar} == null ? 'https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg' : ${user.avatar}" alt="Tg" class="layui-nav-img">
+          贤心
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" style="background-color: #009688;" href="/store/commodity">所有商品</a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="/store/publish">发布商品</a>
+        </li>
+        <li class="layui-nav-item"><a href="">订单管理</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+	
+	<div class="demoTable">
+  搜索ID：
+  <div class="layui-inline">
+    <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+  </div>
+  <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+<div style="height:500px;overflow:auto;">
+<table class="layui-table" id="test" lay-filter="test">
+  <thead>
+     <tr>
+	  <th >ID</th>
+      <th>昵称</th>
+	  <th>售卖价格</th>
+	  <th>商品状态</th>
+	  <th>店铺名称</th>
+	  <th>商品描述</th>
+      <th>加入时间</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="commodity : ${commodities}">
+	  <th class="id" th:text="${commodity.id}">1</th>
+      <th th:text="${commodity.commodityname}">昵称</th>
+	  <th th:text="${commodity.price}">售卖价格</th>
+	  <th class="ifshelves" th:unless="${commodity.ifground}"><a class="layui-btn layui-btn-primary layui-btn-xs">下架</a></th>
+	  <th class="ifshelves" th:if="${commodity.ifground}"><a class="layui-btn layui-btn-xs" lay-event="edit">上架</a></th>
+	  <th th:text="${commodity.storename}">店铺名称</th>
+	  <th th:text="${commodity.info}">商品描述</th>
+      <th th:text="${commodity.createTime}">加入时间</th>
+      <th>
+		<a class="layui-btn layui-btn-primary layui-btn-xs offShelves" >下架</a>
+		<a class="layui-btn layui-btn-xs shelves"  >上架</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs delete" >删除</a>
+	  </th>
+    </tr>
+  </tbody>
+</table>
+</div>
+	</div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+<script src="/res/layui/layui.js"></script>
+<script>
+//JavaScript代码区域
+layui.use(['element','layer'], function(){
+  var element = layui.element;
+  var ayer = layui.layer;
+  var $ = layui.$;
+  $(".offShelves").click(function(){
+	var _that=this;
+	layer.confirm('确认要下架吗？',function(index){
+		var html="<a class='layui-btn layui-btn-primary layui-btn-xs'>下架</a>";
+		var formData = new FormData();  
+        formData.append('type',2);
+        formData.append('id',$(_that).parent("th").parent("tr").children(".id").html());
+        submitMessage(formData);
+		$(_that).parent("th").parent("tr").children(".ifshelves").html(html);
+		$(_that).css("display","none");
+		$(_that).parent("th").children(".shelves").removeAttr("style");
+		layer.close(index);
+	});
+  })
+  
+  $(".shelves").click(function(){
+	
+	var _that=this;
+	//alert($(_that).parent("th").parent("tr").children(".id").html());
+	layer.confirm('确认要上架吗？',function(index){
+		var html="<a class='layui-btn layui-btn-xs' lay-event='edit'>上架</a>";
+		var formData = new FormData();  
+        formData.append('type',1);
+        formData.append('id',$(_that).parent("th").parent("tr").children("th").html());
+        submitMessage(formData);
+		$(_that).parent("th").parent("tr").children(".ifshelves").html(html);
+		$(_that).css("display","none");
+		$(_that).parent("th").children(".offShelves").removeAttr("style");
+		layer.close(index);
+	});
+  })
+  
+  $(".delete").click(function(){
+	var _that=this;
+	layer.confirm('确认要删除吗？',function(index){
+		$(_that).parent("th").parent("tr").remove();
+		layer.close(index);
+	});
+	
+  })
+  
+function submitMessage(message){ 
+      $.ajax({
+            url: '/ground',
+            type: 'POST',
+            data: message,
+            //这两个设置项必填
+            contentType: false,
+            processData: false,
+            dataType: 'jsonp',
+            calback: "callback",
+            cache: false,
+            success: function (data) {
+              console.log(data);
+          　　		if(data['status']=='200'){
+                    layer.msg("更改成功", {icon: 1,time:1000 });
+              }else{
+                    layer.msg('更改失败!',{icon:2,time:1000});
+              }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                          alert(XMLHttpRequest.status);
+                          alert(XMLHttpRequest.readyState);
+                          alert(textStatus);
+            }
+      });
+
+  }
+});
+</script>
+</body>
+</html>

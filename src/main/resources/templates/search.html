@@ -1,0 +1,107 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="utf-8">
+  <title>商品搜索</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="涛哥商城">
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../res/css/global.css">
+  <link rel="stylesheet" href="/res/css/common.css">
+  <link rel="stylesheet" href="/res/css/m.css">
+  <link rel="stylesheet" href="/res/css/kk.css">
+</head>
+<style>
+
+
+</style>
+<body>
+
+<div class="fly-header layui-bg-black" th:replace="~{index::header}">
+</div>
+
+<div class="layui-container" style="margin-top:7.5px; display:block" id="content">
+  <div class="container">
+    <form class="parent" th:fragment="search">
+    	<label class="layui-form-label" style="width:20%;font-size: 14px; color:red; text-align: right">快来买 好衣服    好裤子 好鞋子</label>
+        <input type="text" id="searchText">
+        <input type="button" value="商城内搜索" id="search">
+        <label class="layui-form-label" style="width:20%;font-size: 14px; text-align: left; position:absolute;left:80%; color:red;">好电脑    手表  好家电 快来卖</label>
+    </form>
+  </div>
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md9 "> 
+    	<div class="fly-panel"  >
+    		<div class="fly-panel-title fly-filter" th:replace="~{index::type}">
+       
+        	</div>
+        	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+			  <legend>为您找到以下商品</legend>
+			</fieldset>
+        	<ul class="flow-default" style="height: auto;" >
+        		<li th:each="commodity :${commodities}">
+        			<a th:href="'/commodity/'+${commodity.id}">
+        				<img th:src="${commodity.picture}">[[${commodity.commodityname}]]
+        			</a>
+        		</li>
+        		<li th:if="${commodities.size()}==0">
+        			<a  target="_blank" href="https://get-blog.oss-cn-shanghai.aliyuncs.com/wentaohome/weixin.png">
+        				<img src="https://get-blog.oss-cn-shanghai.aliyuncs.com/wentaohome/weixin.png">商城内未找到该商品...为您推荐
+        			</a>
+        		</li>
+        	</ul>     	
+    	</div>	
+     </div>
+    <div class="layui-col-md3" th:replace="~{index::recommend}">
+    
+    </div>
+  </div>
+</div>
+<div class="fly-footer" th:replace="~{index::footer}">
+</div>
+ 
+<script src="../res/layui/layui.js"></script>
+<script>
+layui.cache.page = '';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '../res/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '../res/mods/' //这里实际使用时，建议改成绝对路径
+}).extend({
+  fly: 'index'
+}).use('fly');
+</script>
+<script>
+layui.use(['form','element','layer'], function(){
+  var form = layui.form;
+  var element = layui.element; 
+  var $=layui.jquery;
+  var layer=layui.layer;
+  element.on('nav(demo)', function(elem){
+    //console.log(elem)
+    layer.msg(elem.text());
+  });
+  var url=window.location.href;
+  var commodityname=url.split("=")[1];
+  $('#searchText').val(commodityname);
+  $('#search').click(function(){
+	  var searchText=$('#searchText').val();
+	  if(searchText==""){
+		  layer.msg("搜索的商品不能为空！",{icon:2,time:1000});
+		  return;
+	  }
+	  window.location.href="/search?commodityname="+searchText;
+  })
+});
+</script>
+</body>
+</html>

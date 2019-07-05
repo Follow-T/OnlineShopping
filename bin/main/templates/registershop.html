@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!--引入头部-->
+<head>
+  <meta charset="utf-8">
+  <title>店铺注册</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="涛哥商城">
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../res/css/global.css">
+  <link rel="stylesheet" href="/res/css/common.css">
+  <link rel="stylesheet" href="/res/css/m.css">
+  <link rel="stylesheet" href="/res/css/kk.css">
+</head>
+<body>
+
+<!--引入顶部导航-->
+<div th:replace="~{index::header}" class="fly-header layui-bg-black">
+</div>
+
+<div class="layui-container" style="margin-top:7.5px; display:block;" id="content">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md9 "> 
+	    <fieldset class="layui-elem-field layui-field-title" th:if="${hotStores}">
+	    	<legend>温馨提示：您已有店铺了，请勿重复注册!</legend>
+	  	</fieldset>
+	  	<fieldset class="layui-elem-field layui-field-title" th:unless="${hotStores}">
+	    	<legend>温馨提示：请输入正确的手机号以及邮箱，方便联系，商店凭证的格式为图片</legend>
+	  	</fieldset>
+		<form class="layui-form" action="/regStore" method="post" id="form" enctype="multipart/form-data">
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">店铺名</label>
+		    <div class="layui-input-block">
+		      <input type="text" id="storename" name="storename" lay-verify="required" lay-reqtext="店铺名是必填项，岂能为空？" placeholder="请输入" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+		  
+		  <div class="layui-form-item">
+		    <div class="layui-inline">
+		      <label class="layui-form-label">验证手机</label>
+		      <div class="layui-input-inline">
+		        <input type="tel" id="phone" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+		      </div>
+		    </div>
+		    <div class="layui-inline">
+		      <label class="layui-form-label">验证邮箱</label>
+		      <div class="layui-input-inline">
+		        <input type="text" id="email" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">店铺类型</label>
+		    <div class="layui-input-block">
+		      <select id="type" name="type" lay-filter="aihao">
+		        <option value=""></option>
+		        <option value="0">衣服</option>
+		        <option value="1" selected="">裤子</option>
+		        <option value="2">鞋子</option>
+		        <option value="3">电脑</option>
+		        <option value="4">手表</option>
+				<option value="5">其他</option>
+		      </select>
+		    </div>
+		  </div>
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">店铺简介</label>
+		    <div class="layui-input-block">
+		      <textarea id="info" placeholder="请输入内容"  name="info" class="layui-textarea"></textarea>
+		    </div>
+		  </div>
+		  
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">店铺凭证</label>
+		    <div class="layui-upload">
+			  <input type="file" name="file" id="photo" value=""   placeholder="选择图片" accept="image/gif,image/jpeg,image/jpg,image/png">
+			</div>
+		  </div>
+		  
+		  <div class="layui-form-item">
+		    <div class="layui-input-block">
+		      <button class="layui-btn" lay-submit="" lay-filter="demo1" type="submit">立即提交</button>
+		      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		  </div>
+		</form>
+    </div>
+    <div class="layui-col-md3" th:replace="~{index::recommend}">
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{index::footer}" class="fly-footer">
+</div>
+
+<script src="/res/layui/layui.js"></script>
+<script src="../res/Jquery.js"></script>
+<script src="../res/js/jquery.form.js"></script>
+<script src="../res/js/index.js"></script>
+
+
+<script>
+layui.use(['form', 'upload','element'], function(){
+  var form = layui.form;
+  var layer = layui.layer;
+  var upload = layui.upload;
+  var element = layui.element;
+  var $ = layui.jquery;
+  
+  //监听导航点击
+  element.on('nav(demo)', function(elem){
+    //console.log(elem)
+    layer.msg(elem.text());
+  });
+  
+  //提交之前的验证
+  $("#form").bind("submit", function(){  
+		var file=$("#photo").val();
+		if(file == ""){  
+			layer.alert("请选择文件！！！");
+			return false;  
+		}  
+   });
+  
+  //接收form表单的返回值
+  $(function(){
+		$("#form").ajaxForm(function(data){  
+			if(data['status']=="200"){
+				layer.msg("提交成功，等待审核！",{icon:1,time:1000});
+			}else{
+				layer.msg(data['data'],{icon:2,time:1000});
+			}
+		});     
+	});
+});
+</script>
+
+</body>
+</html>

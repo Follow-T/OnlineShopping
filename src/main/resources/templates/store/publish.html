@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>我的店铺后台</title>
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo" id="store" th:text="${store.storename}"></div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img  th:src="${user.avatar} == null ? 'https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg' : ${user.avatar}" alt="Tg"class="layui-nav-img">
+          贤心
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="/logout">退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="/store/commodity">所有商品</a>
+        </li>
+        <li class="layui-nav-item">
+          <a style="background-color: #009688;" href="/store/publish">发布商品</a>
+        </li>
+        <li class="layui-nav-item"><a href="">订单管理</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+		<div class="layui-row layui-col-space15">
+    <div class="layui-col-md9 "> 
+		<div class="layui-form" >
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">商品名</label>
+		    <div class="layui-input-block">
+		      <input type="text" id="commodityname" name="commodityname" lay-verify="required" lay-reqtext="店铺名是必填项，岂能为空？" placeholder="请输入" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+		  
+		  <div class="layui-form-item">
+		    <div class="layui-inline">
+		      <label class="layui-form-label">商品价格</label>
+		      <div class="layui-input-inline">
+		        <input type="text" id="price" name="price"  autocomplete="off" class="layui-input">
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">商品类型</label>
+		    <div class="layui-input-block">
+		      <select id="type" name="interest" lay-filter="aihao">
+		        <option value=""></option>
+		        <option value="1">衣服</option>
+		        <option value="2" selected="">裤子</option>
+		        <option value="3">鞋子</option>
+		        <option value="4">汽车</option>
+		        <option value="5">电脑</option>
+				<option value="6">手表</option>
+		      </select>
+		    </div>
+		  </div>
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">商品简介</label>
+		    <div class="layui-input-block">
+		      <textarea id="info" placeholder="请输入内容" class="layui-textarea"></textarea>
+		    </div>
+		  </div>
+		  
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">商品照片</label>
+		    <div class="layui-upload">
+			  <button type="button" class="layui-btn layui-btn-normal" id="chooseFile">选择文件</button>
+			</div>
+		  </div>
+		  
+		  <div class="layui-form-item">
+		    <div class="layui-input-block">
+		      <button class="layui-btn" lay-submit="" lay-filter="demo1" id="submit">立即提交</button>
+		      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		  </div>
+		</div>
+    </div>
+	
+	</div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    做更细的工作
+  </div>
+</div>
+<script src="/res/layui/layui.js"></script>
+<script>
+layui.use(['form', 'upload','element'], function(){
+  var form = layui.form;
+  var layer = layui.layer;
+  var upload = layui.upload;
+  var element = layui.element;
+  var $ = layui.jquery;
+  var loginUsername='[[${#authentication.principal.username}]]';
+  
+  //监听导航点击
+  element.on('nav(demo)', function(elem){
+    //console.log(elem)
+    layer.msg(elem.text());
+  });
+  
+  //选完文件后不自动上传
+  upload.render({
+    elem: '#chooseFile'
+    ,url: '/regCommodity'
+    ,auto: false
+    ,method: 'post'
+    ,data: {
+    	storename: function(){
+    		return $('#store').text();
+    	},
+    	price: function(){
+    		return $('#price').val();
+    	},
+    	commodityname: function(){
+    		return $('#commodityname').val();
+    	},
+    	type: function(){
+    		return $('#type option:selected').val();;
+    	},
+    	info: function(){
+    		return $('#info').val();
+    	},
+    	username: function(){
+    		return loginUsername;
+    	}
+    }
+    //,multiple: true
+    ,bindAction: '#submit'
+    ,done: function(res){
+      console.log(res);
+      if (res.status == 200) {//长传成功(具体返回status 看后台是怎么处理的)
+    	  layer.msg('提交成功，等待审核!',{icon:1,time:1000});
+      	  
+      } else{
+    	  layer.msg('注册失败!',{icon:2,time:1000});
+      }
+    }
+  });	
+
+  /*//普通文件上传
+        var uploadInst = upload.render({
+            elem: '#img_upload',
+            url: '/'+username+'/upload',//这里填写你的上传地址
+            accept: 'images',
+            method: 'post',
+            size:1024,
+            exts: 'jpg|png|gif|',
+            acceptMime: 'image/*'
+            , before: function (obj) {
+                /*如果您不想用上面的URL 进行上传,也可以在这里,添加你的上传方式*/
+                /*obj.preview(function (index, file, result) {
+                    $('.img').attr('src', result);//图片链接（base64）
+                });
+            }, done: function (res) {
+                if (res.status == 201) {//长传成功(具体返回status 看后台是怎么处理的)
+                    return layer.msg('上传失败,操作用户不为本人!');
+                } else if(res.code == 202){
+                    layer.msg('请先登录!');
+                }else{
+                	layer.msg('图片上传成功!');
+                }
+            }
+            , error: function () {
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+            }
+        });*/
+  
+  
+});
+</script>
+</body>
+</html>

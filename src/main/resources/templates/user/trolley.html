@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!--引入头部-->
+<head>
+  <meta charset="utf-8">
+  <title>店铺</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="涛哥商城">
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../res/css/global.css">
+  <link rel="stylesheet" href="/res/css/common.css">
+  <link rel="stylesheet" href="/res/css/m.css">
+  <link rel="stylesheet" href="/res/css/kk.css">
+  <style>
+  html, body {
+    background: #FFFFFF;
+  }
+  </style>
+</head>
+<body>
+
+<!--引入顶部导航-->
+<div th:replace="~{index::header}" class="fly-header layui-bg-black">
+</div>
+<div class="layui-container" style="margin-top:7.5px; display:block" id="content"> 
+	<table class="layui-table" id="test" lay-filter="test">
+	  <thead>
+	    
+	     <tr>
+		  <th ><input type="checkbox" style="width:18px;height:18px;" id="all">全选</th>
+	      <th>商品名称</th>
+		  <th>店铺名称</th>
+		  <th>商品信息</th>
+		  <th>单价</th>
+		  <th>数量</th>
+	      <th>金额</th>
+	      <th>操作</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+		<tr th:each="trolley :${trolleyList}">
+		  <th th:text="${trolley.id}" class="id" style="display:none"></th>
+		  <th><input type="checkbox" class="checkbox" style="width:18px;height:18px;"></th>
+	      <th th:text="${trolley.commodityname}">昵称</th>
+		  <th th:text="${trolley.storename}">店铺名称</th>
+		  <th class="ifshelves" ><a class="layui-btn layui-btn-primary layui-btn-xs" th:text="${trolley.info}">下架</a></th>
+		  <th th:text="${trolley.price}">78</th>
+		  <th ><input class="number" type="number" style="width:40px;" value=1  min="0" onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" ></th>
+	      <th th:text="${trolley.price}" class="cost">78</th>
+	      <th>
+			<a class="layui-btn layui-btn-danger layui-btn-xs delete" >删除</a>
+		  </th>
+	    </tr>
+	  </tbody> 	
+	</table>
+	<div style="background-color:#6666661a;height:50px;">
+	<button type="button" class="layui-btn" data-method="offset" data-type="auto" style="width:100px;float:right; height:50px; margin-left:20px;margin-right:20px;" id="account" >结算</button>
+	<button type="button" class="layui-btn layui-btn-primary " id="cost" style="width:150px;float:right; height:50px; ">总费用：0</button>
+	
+	</div>
+</div>  
+
+<div th:replace="~{index::footer}" class="fly-footer">
+</div>
+
+<script src="/res/layui/layui.js"></script>
+<script src="../res/Jquery.js"></script>
+<script src="../res/js/index.js"></script>
+<script>
+layui.use(['element','layer'], function(){
+  var $ = layui.jquery
+  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+  var layer = layui.layer; //独立版的layer无需执行这一句 弹出层
+  
+   
+  layer.msg('hello');
+  //改变商品数量
+  $('.number').bind('input propertychange', function(){
+	var cost=0;
+	if($(this).val()){
+		$(this).parent().next().text(parseInt($(this).parent().prev().text())*parseInt($(this).val()));
+		$(".checkbox").each(function(){
+		if($(this).prop("checked") == true){
+			//alert($(this).parent().parent().find(".cost").text());
+			cost+=parseInt($(this).parent().parent().find(".cost").text());
+		}
+		})
+		var str="总费用："+cost;
+		$("#cost").text(str);
+		}
+  })
+  
+  //选择所有
+  $("#all").click(function(){
+	var cost=0;
+	$("input[type='checkbox']").each(function(){
+		$(this).prop("checked", true);
+	})
+	$(".cost").each(function(){
+		cost+=parseInt($(this).text());
+	})
+	var str="总费用："+cost;
+	$("#cost").text(str);
+	
+  })
+  
+  //选择一个
+  $(".checkbox").click(function(){
+	var cost=0;
+	$("#all").prop("checked", false);
+	$(".checkbox").each(function(){
+		if($(this).prop("checked") == true){
+			//alert($(this).parent().parent().find(".cost").text());
+			cost+=parseInt($(this).parent().parent().find(".cost").text());
+		}
+	})
+	var str="总费用："+cost;
+	$("#cost").text(str);
+  })
+  
+ //购买商品
+  $("#account").click(function(){
+	var html="<div style='display: flex;justify-content: center;align-items: center; '><img src='https://get-blog.oss-cn-shanghai.aliyuncs.com/wentaohome/weixin.png' style='width:500px;height:500px;'></div>";
+	layer.open({
+	  type: 1, 
+	  title:'扫码即可付款',
+	  area: 'auto',
+	  maxWidth:'520',
+	  maxWidth:'auto',
+	  maxmin: true,
+	  content: html
+	  ,btn: ['我已付款','取消付款']
+	  ,yes: function(index, layero){
+		layer.msg("付款成功,宝贝正火速赶来！", {icon: 1,time:1500 });
+		layer.close(index);
+	  },btn2: function(index, layero){
+		layer.msg("取消付款...", {icon: 2,time:1500 });
+		layer.close(index);
+	  }
+  
+	});
+  })
+  
+  //移除购物车
+  $(".delete").click(function(){
+	var _that=this;
+	layer.confirm('确认要删除吗？',function(index){
+		var id=$(_that).parent("th").parent("tr").find(".id").text();
+		$.ajax({
+            url: '/removeShoppingTrolley/'+id,
+            type: 'POST',
+            data: '',
+            //这两个设置项必填
+            contentType: false,
+            processData: false,
+            dataType: 'jsonp',
+            calback: "callback",
+            cache: false,
+            success: function (data) {
+              console.log(data);
+          　　		if(data['status']=='200'){
+                    layer.msg("删除成功", {icon: 1,time:1000 });
+                    $(_that).parent("th").parent("tr").remove();
+              }else{
+                    layer.msg('删除失败!',{icon:2,time:1000});
+              }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            	layer.msg('网络错误!',{icon:2,time:1000});
+            }
+      	});
+		layer.close(index);
+	});
+	
+  })
+  
+});
+</script>
+
+
+</body>
+</html>

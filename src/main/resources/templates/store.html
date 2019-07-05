@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!--引入头部-->
+<head>
+  <meta charset="utf-8">
+  <title>店铺</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="涛哥商城">
+  <link rel="stylesheet" href="../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../res/css/global.css">
+  <link rel="stylesheet" href="/res/css/common.css">
+  <link rel="stylesheet" href="/res/css/m.css">
+  <link rel="stylesheet" href="/res/css/kk.css">
+  <style>
+  html, body {
+    background: #FFFFFF;
+  }
+  </style>
+</head>
+<body>
+
+<!--引入顶部导航-->
+<div th:replace="~{index::header}" class="fly-header layui-bg-black">
+</div>
+<div class="" style="margin-top:7.5px; display:block" id="content"> 
+	<div class="layui-tab layui-tab-card" >
+	  <ul class="layui-tab-title">
+		<li class="layui-this"><a href="">首页</a></li>
+		<li>所有宝贝</li>
+		<li>品牌故事</li>
+		<li>优惠领取</li>
+	  </ul>
+	  <div class="layui-tab-content" >
+		<div class="layui-tab-item layui-show">
+			<img src="" th:src="${store.file}"style="width:100%">
+			<fieldset class="layui-elem-field" style="margin-top: 20px;">
+			  <legend>热销商品推荐</legend>
+			  <div class="layui-field-box">
+				<div style="padding: 20px; ">
+				  <div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+					  <div class="layui-card">
+					    <div class="layui-card-header" style="font-size:18px; color:red;">店铺最热</div>
+					    <div class="layui-card-body">
+						  <a href="" target="_blank"><img th:src="${commodities.get(0).picture}" style="width:100%;"></a>
+						</div>
+						
+					  </div>
+					</div>
+					<div class="layui-col-md4">
+					  <div class="layui-card">
+					    <div class="layui-card-header" style="font-size:15px; color:#ffbe00;">[[${commodities.get(0).commodityname}]]仅售:[[${commodities.get(0).price}]]元<br></div>	
+					    <div class="layui-card-body">
+						  <a><img th:src="${commodities.get(1).picture}" style="width:100%;height:500px;"></a>
+						</div>
+
+					  </div>
+					</div>
+					<div class="layui-col-md4">
+					  <div class="layui-card">
+					    <div class="layui-card-header" style="font-size:15px; color:#ffbe00;">[[${commodities.get(0).commodityname}]]仅售:[[${commodities.get(0).price}]]元<br></div>	
+					    <div class="layui-card-body">
+						  <a><img th:src="${commodities.get(2).picture}" style="width:100%;height:500px;"></a>
+						</div>
+
+					  </div>
+					</div>
+					<div class="layui-col-md4">
+					  <div class="layui-card">
+					    <div class="layui-card-header" style="font-size:15px; color:#ffbe00;">[[${commodities.get(0).commodityname}]]仅售:[[${commodities.get(0).price}]]元<br></div>	
+					    <div class="layui-card-body">
+						  <a><img th:src="${commodities.get(3).picture}" style="width:100%;height:500px;"></a>
+						</div>
+
+					  </div>
+					</div>
+				  </div>
+				</div> 		
+			  </div>
+			</fieldset>
+			
+		</div>
+		<div class="layui-tab-item">
+			<div style="padding: 20px; ">
+			  <div class="layui-row layui-col-space15" >
+				<div class="layui-col-md3" th:each="commodity :${commodities}"  style="float:left;">
+					  <div class="layui-card">
+					    <div class="layui-card-header" style="font-size:15px; color:#ffbe00;" th:text="${commodity.commodityname}+'仅售:'+${commodity.price}+'元'"><br></div>	
+					    <div class="layui-card-body">
+						  <a><img th:src="${commodity.picture}" style="height:350px;width:100%" id="img"></a>
+						</div>
+					  </div>
+				</div>
+			  </div>
+			  
+			</div> 
+		
+		</div>
+		<div class="layui-tab-item">3</div>
+		<div class="layui-tab-item">4</div>
+	  </div>
+	  <span class="layui-breadcrumb" lay-separator="|" style="text-align: center;display:block;">
+		  <a href="" style="font-size:15px;" th:text="${store.storename}">店铺名称</a>
+		  <a href="">智能版</a>
+	  </span>
+	  <fieldset class="layui-elem-field">
+		  <legend>我们承若</legend>
+		  <div class="layui-field-box">
+			 <a><img src="/images/admit.png" style="width:100%;"></a>
+		  </div>
+	  </fieldset>
+	</div>
+</div>  
+
+<div th:replace="~{index::footer}" class="fly-footer">
+</div>
+
+<script src="/res/layui/layui.js"></script>
+<script src="../res/Jquery.js"></script>
+<script src="../res/js/index.js"></script>
+<script>
+layui.use('element', function(){
+  var $ = layui.jquery
+  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+});
+</script>
+
+
+</body>
+</html>
